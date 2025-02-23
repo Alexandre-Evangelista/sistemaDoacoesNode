@@ -9,32 +9,33 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 // Modelo Usuario
 model Usuario {
-  email           String       @id @db.VarChar(256)
-  geolocalizacao  Unsupported("geometry")? // Tipo GEOMETRY do PostGIS
-  foto            String?      @db.VarChar(256)
-  tipo            Boolean?
-  telefone        String?      @db.VarChar(11)
-  nome            String       @db.VarChar(200)
-  cpf             String?      @unique @db.VarChar(11)
-  cnpj            String?      @unique @db.VarChar(14)
-  avaliacoes      Avaliacao[]
-  doacoes         Doacao[]
+  id             String    @id @default(uuid()) @map("_id")
+  email          String    @unique
+  geolocalizacao Json?     
+  foto           String?   
+  tipo           Boolean?
+  telefone       String?   
+  nome           String    
+  cpf            String?   @unique
+  cnpj           String?   @unique
+  avaliacoes     Avaliacao[]
+  doacoes        Doacao[]
 }
 
 
 // Modelo ONG
 model ONG {
-  cnpj            String       @id @db.VarChar(14)
-  nome            String       @db.VarChar(200)
-  geolocalizacao  Unsupported("geometry") // Tipo GEOMETRY do PostGIS
-  foto            String?      @db.VarChar(256)
-  descricao       String?      @db.Text
-  telefone        String       @db.VarChar(11)
+  cnpj            String       @id @default(uuid()) @map("_id")
+  nome            String      
+  geolocalizacao  Unsupported("geometry(Point,4326)")// Tipo GEOMETRY do PostGIS
+  foto            String?    
+  descricao       String?     
+  telefone        String       
   campanhas       Campanha[]
   avaliacoes      Avaliacao[]
   doacoes         Doacao[]
@@ -43,25 +44,26 @@ model ONG {
 
 // Modelo Campanha
 model Campanha {
-  id              String          @id @default(uuid())
-  descricao       String       @db.Text
-  foto            String       @db.VarChar(256)
-  geolocalizacao  Unsupported("geometry") // Tipo GEOMETRY do PostGIS
-  datacriacao     DateTime     @db.Date
-  cnpjOng         String?      @db.VarChar(14)
-  ong             ONG?         @relation(fields: [cnpjOng], references: [cnpj], onDelete: Cascade, onUpdate: Cascade)
-  doacoes         Doacao[]
+  id             String    @id @default(uuid()) @map("_id")
+  descricao      String
+  foto           String
+  geolocalizacao Json?     // Utilize JSON para armazenar os dados de localização (por exemplo, GeoJSON)
+  datacriacao    DateTime
+  cnpjOng        String?
+  ong            ONG?      @relation(fields: [cnpjOng], references: [cnpj])
+  doacoes        Doacao[]
+
 }
 
 
 // Modelo Doacao
 model Doacao {
-  id              String          @id @default(uuid())
-  datadoacao      DateTime     @db.Date
+  id              String        @id @default(uuid()) @map("_id")
+  datadoacao      DateTime     
   quantidade      Int
-  tipo            String       @db.VarChar(200)
-  email           String?      @db.VarChar(256)
-  cnpj            String?      @db.VarChar(14)
+  tipo            String       
+  email           String?      
+  cnpj            String?     
   IDcampanha      String?
   usuario         Usuario?     @relation(fields: [email], references: [email])
   ong             ONG?         @relation(fields: [cnpj], references: [cnpj])
@@ -71,14 +73,13 @@ model Doacao {
 
 // Modelo Avaliacao
 model Avaliacao {
-  emailUsuario    String       @db.VarChar(256)
-  cnpj            String       @db.VarChar(14)
-  feedback        String       @db.Text
+  id           String   @id @default(uuid()) @map("_id")
+  emailUsuario    String      
+  cnpj            String       
+  feedback        String     
 
 
-  usuario         Usuario      @relation(fields: [emailUsuario], references: [email], onDelete: Cascade, onUpdate: Cascade)
-  ong             ONG          @relation(fields: [cnpj], references: [cnpj], onDelete: Cascade, onUpdate: Cascade)
-
-
-  @@id([emailUsuario, cnpj])
+  usuario         Usuario      @relation(fields: [emailUsuario], references: [email])
+  ong             ONG          @relation(fields: [cnpj], references: [cnpj])
+  @@unique([emailUsuario, cnpj])
 }

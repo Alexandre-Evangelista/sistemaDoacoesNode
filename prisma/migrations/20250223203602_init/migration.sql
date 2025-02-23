@@ -1,7 +1,9 @@
 -- CreateTable
+CREATE EXTENSION postgis;
+
 CREATE TABLE "Usuario" (
     "email" VARCHAR(256) NOT NULL,
-    "geolocalizacao" geometry,
+    "geolocalizacao" geometry(Point,4326),
     "foto" VARCHAR(256),
     "tipo" BOOLEAN,
     "telefone" VARCHAR(11),
@@ -16,7 +18,7 @@ CREATE TABLE "Usuario" (
 CREATE TABLE "ONG" (
     "cnpj" VARCHAR(14) NOT NULL,
     "nome" VARCHAR(200) NOT NULL,
-    "geolocalizacao" geometry NOT NULL,
+    "geolocalizacao" geometry(Point,4326) NOT NULL,
     "foto" VARCHAR(256),
     "descricao" TEXT,
     "telefone" VARCHAR(11) NOT NULL,
@@ -29,7 +31,7 @@ CREATE TABLE "Campanha" (
     "id" TEXT NOT NULL,
     "descricao" TEXT NOT NULL,
     "foto" VARCHAR(256) NOT NULL,
-    "geolocalizacao" geometry NOT NULL,
+    "geolocalizacao" geometry(Point,4326) NOT NULL,
     "datacriacao" DATE NOT NULL,
     "cnpjOng" VARCHAR(14),
 

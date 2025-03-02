@@ -1,10 +1,12 @@
-import { PrismaClient } from "@prisma/client/extension";
-import { sign } from "jsonwebtoken";
+import { prisma } from "../Database/repository.js";
+import { OngService } from "../Services/ongService.js";
+import pkg from "jsonwebtoken";
+const { sign } = pkg;
 import bcrypt,{ compare } from "bcryptjs";
 import { ONG } from "../Models/Usuario/registerOng.js";
-import { OngService } from "../Services/ongService.js";
+
 const ongService = new OngService()
-const prisma = new PrismaClient();
+
 
 class OngUseCases {
     async registerOng(ong:ONG){

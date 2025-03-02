@@ -5,8 +5,8 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-class ONGCotroller{
-    static async registerONG(req:Request,res:Response){
+class OngCotroller{
+     async registerOng(req:Request,res:Response){
        try{ 
             const { cnpj, nome, senha, telefone, descricao, foto, geolocalizacao } = req.body as ONG;
             const ong = await ongUseCases.registerOng({ cnpj, nome, senha, telefone, descricao, foto, geolocalizacao });
@@ -17,7 +17,7 @@ class ONGCotroller{
         }        
     }
 
-    static async login(req: Request, res: Response) {
+   async login(req: Request, res: Response) {
     try {
       const { cnpj, senha } = req.body;
       const login = await ongUseCases.login(cnpj, senha);
@@ -52,3 +52,5 @@ class ONGCotroller{
   }
 
 }
+
+export default OngCotroller;

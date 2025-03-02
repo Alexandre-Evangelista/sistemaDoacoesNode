@@ -2,7 +2,8 @@
 // Tipo para o modelo Usuario
 type Usuario = {
     email: string;
-    geolocalizacao?: Point; //postgis
+    latitude:   Float;
+    longitude:  Float;
     foto?: string | null;
     tipo?: boolean | null;
     telefone?: string | null;
@@ -18,7 +19,8 @@ type Usuario = {
     cnpj: string;
     nome: string;
     senha: string;
-    geolocalizacao: Point; // PostGIS geometry type
+    latitude:   Float;
+    longitude:  Float;
     foto?: string ;
     descricao?: string;
     telefone: string;
@@ -32,7 +34,8 @@ type Usuario = {
     id: string;
     descricao: string;
     foto: string;
-    geolocalizacao: Point; // PostGIS geometry type
+    latitude:   Float;
+    longitude:  Float;
     datacriacao: Date;
     cnpjOng?: string | null;
     ong?: ONG | null;

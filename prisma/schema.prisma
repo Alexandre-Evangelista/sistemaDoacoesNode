@@ -32,10 +32,12 @@ model Usuario {
 model ONG {
   cnpj            String       @id @default(uuid()) @map("_id")
   nome            String      
-  geolocalizacao  Unsupported("geometry(Point,4326)")// Tipo GEOMETRY do PostGIS
+  geolocalizacao Json?   
+  
   foto            String?    
   descricao       String?     
-  telefone        String       
+  telefone        String
+  senha           String       
   campanhas       Campanha[]
   avaliacoes      Avaliacao[]
   doacoes         Doacao[]

@@ -10,6 +10,8 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE"], 
   }));
 
+app.use(express.json());
+
 app.get('/',((req: Request, response:Response)=>{
     response.send("teste")
 

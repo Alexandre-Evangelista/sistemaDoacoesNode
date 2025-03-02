@@ -17,9 +17,10 @@ type Usuario = {
   type ONG = {
     cnpj: string;
     nome: string;
+    senha: string;
     geolocalizacao: Point; // PostGIS geometry type
-    foto?: string | null;
-    descricao?: string | null;
+    foto?: string ;
+    descricao?: string;
     telefone: string;
     campanhas: Campanha[];
     avaliacoes: Avaliacao[];

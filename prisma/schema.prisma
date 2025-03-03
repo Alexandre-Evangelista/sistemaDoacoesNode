@@ -24,6 +24,7 @@ model Usuario {
   nome           String    
   cpf            String?   @unique
   cnpj           String?   @unique
+  senha           String 
   avaliacoes     Avaliacao[]
   doacoes        Doacao[]
 }

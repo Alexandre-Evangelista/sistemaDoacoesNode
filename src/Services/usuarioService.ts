@@ -2,19 +2,30 @@ import { prisma } from "../Database/repository.js";
 import { Usuario } from "../Models/Usuario/registerUsuario.js";
 
 export class UsuarioService{
-    async criarUsuario(data:{
-        email: string;
-        geolocalizacao?:object; 
-        foto?: string | null;
-        tipo?: boolean | null;
-        senha: string;
-        telefone?: string | null;
-        nome: string;
-        cpf?: string | null;
-        cnpj?: string | null;
-    }){
-        return await prisma.usuario.create({data});
-    }
+    async criarUsuario(data:Usuario){
+        console.log("🔍 Dados do usuario antes da criação:", data);
+      data.geolocalizacao?.coordinates[0]
+      const geolocalizacao = data.geolocalizacao? JSON.stringify(data.geolocalizacao)  : null;
+      try{
+        return await prisma.usuario.create({data:{
+            email: data.email,
+            foto: data.foto ?? null,
+            tipo: data.tipo ?? null,
+            senha: data.senha ,
+            telefone: data.telefone ?? null,
+            nome: data.nome ,
+            cpf: data.cpf?? null,
+            cnpj: data.cnpj ?? null,
+            latitude: data.geolocalizacao?.coordinates[1],
+            longitude: data.geolocalizacao?.coordinates[0],
+            avaliacoes: { create: [] },
+            doacoes: { create: [] },
+        }});
+      }catch (error) {
+        console.error('Erro ao criar usuario:', error);
+        throw error;
+      }
+    } 
     async listarUsuarios(){
         return await prisma.usuario.findMany();
     }

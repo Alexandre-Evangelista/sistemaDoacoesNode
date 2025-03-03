@@ -2,6 +2,7 @@ import { prisma } from './Database/repository.js';
 import express, { Request, Response, NextFunction, response } from 'express';
 import cors from "cors";
 import ongRouter from './routes/ONG/ongRoutes.js';
+import usuarioRouter from './routes/usuarioRoutes.js';
 import dotenv from 'dotenv';
 dotenv.config();
 console.log(process.env.JWT_SECRET);
@@ -14,7 +15,7 @@ app.use(cors({
   }));
 
 app.use(express.json());
-
+app.use("/",usuarioRouter);
 app.use("/",ongRouter);
 app.get('/',((req: Request, response:Response)=>{
     response.send("teste")

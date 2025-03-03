@@ -3,7 +3,6 @@ import { sign } from "jsonwebtoken";
 import bcrypt,{ compare } from "bcryptjs";
 import { Usuario} from "../Models/Usuario/registerUsuario.js";
 import { UsuarioService } from "../Services/usuarioService.js";
-import { error } from "console";
 const usuarioService = new UsuarioService()
 const prisma = new PrismaClient();
 
@@ -14,8 +13,8 @@ class UsuarioUseCases{
         throw new Error("Usuario já cadastrado");
         }
         user.senha = await bcrypt.hash(user.senha,10);
-        const newong = await usuarioService.criarUsuario(user);
-        return {body: newong, status:200};
+        const newUser = await usuarioService.criarUsuario(user);
+        return {body: newUser, status:200};
         }
 
     async login(email:string,senha:string){
@@ -23,7 +22,7 @@ class UsuarioUseCases{
         if(!user){
         return {body: "Usuário não existe! ", status: 400}
         }
-        const verifyPassword = compare(senha,user.senha);
+        const verifyPassword = await compare(senha,user.senha);
         if(!verifyPassword){
         return {body:"senha incorreta",status:400}
         }

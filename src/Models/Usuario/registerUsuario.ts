@@ -1,8 +1,8 @@
-
+import { Point } from "geojson";
 
 export interface Usuario{
     email: string;
-    geolocalizacao?:object; 
+    geolocalizacao?:Point; 
     foto?: string | null;
     tipo?: boolean | null;
     senha: string;

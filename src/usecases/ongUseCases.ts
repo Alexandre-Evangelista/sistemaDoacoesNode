@@ -3,13 +3,13 @@ import { OngService } from "../Services/ongService.js";
 import pkg from "jsonwebtoken";
 const { sign } = pkg;
 import bcrypt,{ compare } from "bcryptjs";
-import { ONG } from "../Models/Usuario/registerOng.js";
+import { CreateONG } from "../Models/Usuario/registerOng.js";
 
 const ongService = new OngService()
 
 
 class OngUseCases {
-    async registerOng(ong:ONG){
+    async registerOng(ong:CreateONG){
         const ongExist = await ongService.buscarOngPorCnpj(ong.cnpj);
         if(ongExist){
             throw new Error("ONG já cadastrada.");
@@ -42,12 +42,21 @@ class OngUseCases {
         return{body:ong, status:200};
     }
 
+    async mudarFoto(cnpj: string,foto: string){
+        const ong = await ongService.buscarOngPorCnpj(cnpj);
+        if(!ong){
+            return {body: "ONG nao existe! ", status: 400}
+        }
+        const ongAlterada = ongService.alterarFoto(cnpj,foto);
+        return {body: ongAlterada, status:200 }
+    }
+
     async buscarOngs() {
         const ongs = await ongService.listarOngs();
         return { body: ongs, status: 200};
     }
 
-    async updateOng(cnpj: string,data: Omit<ONG, "cnpj">){
+    async updateOng(cnpj: string,data: Omit<CreateONG, "cnpj">){
         const ong = await ongService.buscarOngPorCnpj(cnpj);
         if(!ong){
             return {body: "ONG nao existe! ", status: 400}

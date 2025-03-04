@@ -5,10 +5,9 @@ import ongRouter from './routes/ONG/ongRoutes.js';
 import usuarioRouter from './routes/usuarioRoutes.js';
 import dotenv from 'dotenv';
 dotenv.config();
-console.log(process.env.JWT_SECRET);
-
 const app = express()
 
+app.use("/uploads", express.static("uploads"));
 app.use(cors({
     origin: "*", 
     methods: ["GET", "POST", "PUT", "DELETE"], 

@@ -7,6 +7,7 @@ export class OngService {
       console.log("🔍 Dados da ONG antes da criação:", data);
       data.geolocalizacao?.coordinates[0]
       const geolocalizacao = data.geolocalizacao? JSON.stringify(data.geolocalizacao)  : null;
+      console.log(geolocalizacao)
       try {
       return await prisma.oNG.create({ data: { 
           cnpj: data.cnpj,
@@ -31,6 +32,16 @@ export class OngService {
   
     async listarOngs() {
       return await prisma.oNG.findMany();
+    }
+    
+    async alterarFoto(cnpj: string, foto: string){
+      const ong = await prisma.oNG.update({
+        where: { cnpj },
+        data: { foto }
+    });
+
+    return ong;
+
     }
   
     async buscarOngPorCnpj(cnpj: string) {

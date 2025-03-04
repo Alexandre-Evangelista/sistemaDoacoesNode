@@ -1,6 +1,6 @@
 
 import { Point } from "geojson";
-export interface ONG {
+export interface CreateONG {
     cnpj: string;
     nome: string;
     geolocalizacao?: Point;

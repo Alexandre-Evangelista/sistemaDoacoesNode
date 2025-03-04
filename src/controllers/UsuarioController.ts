@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 class UsuarioController{
      async registerUsuario(req:Request,res:Response){
        try{ 
-            const { email,tipo,cnpj, nome, senha, telefone, foto, geolocalizacao,cpf } = req.body as Usuario;
+            const { email,tipo,cnpj, nome, senha, telefone, foto, geolocalizacao,cpf } = req.body as Usuario;       
             const user = await usuarioUseCases.registerUsuario({ email,tipo,cnpj, nome, senha, telefone,senha, foto, geolocalizacao });
             res.status(user.status).json(user.body)
         }

@@ -1,10 +1,10 @@
-import { PrismaClient } from "@prisma/client/extension";
-import { sign } from "jsonwebtoken";
+import pkg from "jsonwebtoken";
+const { sign } = pkg;
 import bcrypt,{ compare } from "bcryptjs";
 import { Usuario} from "../Models/Usuario/registerUsuario.js";
 import { UsuarioService } from "../Services/usuarioService.js";
 const usuarioService = new UsuarioService()
-const prisma = new PrismaClient();
+
 
 class UsuarioUseCases{
     async registerUsuario(user:Usuario){

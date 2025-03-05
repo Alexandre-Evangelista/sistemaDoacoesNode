@@ -25,11 +25,11 @@ class OngUseCases {
         if(!ong){
             return {body: "ONG nao existe! ", status: 400}
         }
-        const verifyPassword = compare(senha,ong.senha);
+        const verifyPassword = await compare(senha,ong.senha);
         if(!verifyPassword){
             return {body: "Senha incorreta!", status: 400};
         }
-        const token = sign({cpnj: ong.cnpj }, process.env.JWT_SECRET as string,{expiresIn: "1d"})
+        const token = sign({cnpj: ong.cnpj }, process.env.JWT_SECRET as string,{expiresIn: "1d"})
 
         return {body:token, status:200 }
     }

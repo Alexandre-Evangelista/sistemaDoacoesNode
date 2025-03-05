@@ -6,6 +6,9 @@ import { Usuario } from "../Models/Usuario/registerUsuario.js";
 
 const prisma = new PrismaClient();
 
+interface CustomRequest extends Request {
+  userEmail?: string;
+}
 class UsuarioController{
      async registerUsuario(req:Request,res:Response){
        try{ 
@@ -16,7 +19,7 @@ class UsuarioController{
               foto = imagesPath
               console.log("foto: ",{ email,tipo,cnpj, nome, senha, telefone, foto, geolocalizacao,cpf})
             }       
-            const user = await usuarioUseCases.registerUsuario({ email,tipo,cnpj, nome, senha, telefone,senha, foto, geolocalizacao });
+            const user = await usuarioUseCases.registerUsuario({ email,tipo,cnpj, nome, senha, telefone, foto, geolocalizacao });
             res.status(user.status).json(user.body)
         }
         catch(error){
@@ -28,25 +31,34 @@ class UsuarioController{
     try {
       const { email, senha } = req.body;
       const login = await usuarioUseCases.login(email, senha);
-      res.status(login.status).json(login.body);
+      return res.status(login.status).json(login.body);
     } catch (error) {
-      res.status(401).json({error});
+      return res.status(401).json({error});
     }
   }
   async listarUsuarios(req: Request, res: Response) {
     const user = await usuarioUseCases.buscarUsuarios();
-    res.status(user.status).json(user.body);
+    return res.status(user.status).json(user.body);
   }
 
-  async buscarPorEmail(req: Request, res: Response) {
+  async buscarPorEmail(req: CustomRequest, res: Response) {
     const { email } = req.params;
+    const token = req.userEmail
+    if(token != email){
+      return res.status(403).json("Acesso Negado!")
+    }
+
     const user = await usuarioUseCases.buscarUsuarioPorEmail(email);
-    res.status(user.status).json(user.body);
+    return res.status(user.status).json(user.body);
   }
-  async atualizarFoto(req: Request, res: Response){
+  async atualizarFoto(req: CustomRequest, res: Response){
       const {email} = req.params
+      const token = req.userEmail
+    if(token != email){
+      res.status(403).json("Acesso Negado!")
+    }
       if(!req.file){
-        return res.status(400).json("Erro ao informa o arquivo")
+        return res.status(400).json("Erro ao informar o arquivo")
       }
       const fileName = req.file.filename;
       const user = await usuarioUseCases.mudarFoto(email,fileName);
@@ -54,18 +66,29 @@ class UsuarioController{
       
     }
 
-  async deleteUsuario(req:Request, res: Response){
+  async deleteUsuario(req:CustomRequest, res: Response){
+    
     const {email} = req.params
+    const token = req.userEmail
+    if(token != email){
+      console.log(token)
+      return res.status(403).json("Acesso Negado!")
+    }
     const user = await usuarioUseCases.deleteUsuario(email);
-    res.status(user.status).json(user.body);
+     return res.status(user.status).json(user.body);
 
   }
-  async atualizarUsuario(req:Request, res: Response){
+  async atualizarUsuario(req:CustomRequest, res: Response){
     const { email } = req.params;
+    const token = req.userEmail
+    if(token != email){
+
+      return res.status(403).json("Acesso Negado!")
+    }
     const data = req.body;
     data.senha = await bcrypt.hash(data.senha, 10);
     const result = await usuarioUseCases.updateUsuario(email,data);
-    res.status(result.status).json(result.status);
+    return res.status(result.status).json(result.status);
   }
 
 }

@@ -8,9 +8,6 @@ import ONGController
  const ongRouter = Router();
  const ongController = new ONGController()
  const upload = multer(uploadMulter.upload("images/ong"))
- 
-
-
 
  ongRouter.post("/ongs/registrar",upload.single("foto"),ongController.registerOng)
  ongRouter.post("/ongs/login",ongController.login)

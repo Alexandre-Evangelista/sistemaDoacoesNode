@@ -10,6 +10,7 @@ type Usuario = {
     nome: string;
     cpf?: string | null;
     cnpj?: string | null;
+    senha: string
     avaliacoes: Avaliacao[];
     doacoes: Doacao[];
   };

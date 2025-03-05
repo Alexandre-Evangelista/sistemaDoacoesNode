@@ -50,7 +50,7 @@ class UsuarioUseCases{
             const user = await usuarioService.listarUsuarios()
             return { body: user, status: 200};
         }
-        async updateUsuario(email:string,data:Omit<Usuario,"email">){
+        async updateUsuario(email:string,data:Omit<Usuario,"email"|"id">){
             const user= await usuarioService.buscarUsuarioPorEmail(email);
             if(!user){
                 return{body:"Usuario nao existe", status:400}

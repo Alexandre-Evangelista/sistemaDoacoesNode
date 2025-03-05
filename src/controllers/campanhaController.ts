@@ -16,21 +16,21 @@ const prisma = new PrismaClient();
                 console.log("foto: ",{id, descricao, foto, geolocalizacao })
               }
               const campanha =await campanhaUseCases.registerCampanha({ id, descricao, foto, geolocalizacao });
-              res.status(campanha.status).json(campanha.body)
+              return  res.status(campanha.status).json(campanha.body)
         }
         catch (error){
-            res.status(400).json(error)
+            return res.status(400).json(error)
         }     
     }
     async listarCampanhas(req: Request, res: Response){
         const campanha= await campanhaUseCases.buscarCampanhas()
-        res.status(campanha.status).json(campanha.body);
+        return res.status(campanha.status).json(campanha.body);
     }
 
     async buscarPorId(req: Request, res: Response){
         const { id } = req.params;
         const campanha= await campanhaUseCases.buscarCampanhaPorId(id);
-        res.status(campanha.status).json(campanha.body);
+        return res.status(campanha.status).json(campanha.body);
     }
 
     async atualizarFoto(req: Request, res: Response){
@@ -47,13 +47,13 @@ const prisma = new PrismaClient();
     async deleteCampanhas(req: Request, res: Response){
         const {id} = req.params;
         const campanha= await campanhaUseCases.deletarCampanha(id);
-        res.status(campanha.status).json(campanha.body);
+        return res.status(campanha.status).json(campanha.body);
     }
 
     async atualizarCampanhas(req: Request, res: Response){
         const {id} = req.params
         const data= req.body;
         const campanha= await campanhaUseCases.updateCampanha(id,data)
-        res.status(campanha.status).json(campanha.body);
+        return res.status(campanha.status).json(campanha.body);
     }
 }export default CampanhaController;

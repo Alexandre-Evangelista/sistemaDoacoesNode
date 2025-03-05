@@ -5,6 +5,7 @@ import ongRouter from './routes/ONG/ongRoutes.js';
 import usuarioRouter from './routes/usuarioRoutes.js';
 import campanhaRouter from './routes/campanhaRoute.js';
 import dotenv from 'dotenv';
+import doacaoRouter from './routes/Doacao/DoacaoRoute.js';
 dotenv.config();
 const app = express()
 
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use("/",campanhaRouter);
 app.use("/",usuarioRouter);
 app.use("/",ongRouter);
+app.use("/",doacaoRouter);
+
 app.get('/',((req: Request, response:Response)=>{
     response.send("teste")
 

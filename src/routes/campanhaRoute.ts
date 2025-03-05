@@ -3,6 +3,7 @@ import multer from "multer";
 import uploadMulter from "../config/uploadMulter.js";
 import CampanhaController from "../controllers/campanhaController.js";
 
+
 const campanhaRouter = Router();
  const campanhaController = new CampanhaController();
  const upload = multer(uploadMulter.upload("images/ong"));

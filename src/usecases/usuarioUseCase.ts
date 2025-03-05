@@ -37,6 +37,14 @@ class UsuarioUseCases{
             }
             return{body:user,status:200};
         }
+        async mudarFoto(email: string,foto: string){
+            const user = await usuarioService.buscarUsuarioPorEmail(email);
+            if(!user){
+                return {body: "Usuário nao existe! ", status: 400}
+            }
+            const userAlterada = usuarioService.alterarFoto(email,foto);
+            return {body: userAlterada, status:200 }
+        }
 
         async buscarUsuarios() {
             const user = await usuarioService.listarUsuarios()

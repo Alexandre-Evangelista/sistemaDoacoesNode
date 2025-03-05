@@ -29,6 +29,15 @@ export class UsuarioService{
     async listarUsuarios(){
         return await prisma.usuario.findMany();
     }
+    async alterarFoto(email: string, foto: string){
+        const user = await prisma.usuario.update({
+          where: { email },
+          data: { foto }
+      });
+  
+      return user;
+  
+      }
     async buscarUsuarioPorEmail(email:string){
         return await prisma.usuario.findUnique({where:{email}});
     }

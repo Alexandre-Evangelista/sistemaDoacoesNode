@@ -21,5 +21,4 @@ import ONGController
  ongRouter.delete("/ongs/:cnpj",AutenticarOngToken,ongController.deleteOng);
 
 
-
 export default ongRouter;

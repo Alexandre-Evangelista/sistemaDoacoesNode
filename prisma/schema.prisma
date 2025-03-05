@@ -14,10 +14,10 @@ datasource db {
 }
 // Modelo Usuario
 model Usuario {
-  id             String    @id @default(uuid()) @map("_id")
+  id             String   @id @default(uuid())
   email          String    @unique
-  latitude   Float
-  longitude  Float    
+  latitude   Float?
+  longitude  Float? 
   foto           String?   
   tipo           Boolean?
   telefone       String?   
@@ -32,7 +32,7 @@ model Usuario {
 
 // Modelo ONG
 model ONG {
-  cnpj            String       @id @default(uuid()) @map("_id")
+  cnpj            String       @id @default(uuid())
   nome            String      
   latitude   Float?
   longitude  Float ?  
@@ -48,12 +48,12 @@ model ONG {
 
 // Modelo Campanha
 model Campanha {
-  id             String    @id @default(uuid()) @map("_id")
+  id             String    @id @default(uuid())
   descricao      String
   foto           String
-  latitude   Float
-  longitude  Float   // Utilize JSON para armazenar os dados de localização (por exemplo, GeoJSON)
-  datacriacao    DateTime
+  latitude   Float?
+  longitude  Float?   // Utilize JSON para armazenar os dados de localização (por exemplo, GeoJSON)
+  datacriacao    DateTime   @default(now())
   cnpjOng        String?
   ong            ONG?      @relation(fields: [cnpjOng], references: [cnpj])
   doacoes        Doacao[]
@@ -63,7 +63,7 @@ model Campanha {
 
 // Modelo Doacao
 model Doacao {
-  id              String        @id @default(uuid()) @map("_id")
+  id              String        @id @default(uuid())
   datadoacao      DateTime     
   quantidade      Int
   tipo            String       
@@ -78,7 +78,7 @@ model Doacao {
 
 // Modelo Avaliacao
 model Avaliacao {
-  id           String   @id @default(uuid()) @map("_id")
+  id           String   @id @default(uuid())
   emailUsuario    String      
   cnpj            String       
   feedback        String     

@@ -2,13 +2,20 @@ import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";  
 import usuarioUseCases from "../usecases/usuarioUseCase.js";
 import bcrypt from "bcryptjs";
+import { Usuario } from "../Models/Usuario/registerUsuario.js";
 
 const prisma = new PrismaClient();
 
 class UsuarioController{
      async registerUsuario(req:Request,res:Response){
        try{ 
-            const { email,tipo,cnpj, nome, senha, telefone, foto, geolocalizacao,cpf } = req.body as Usuario;       
+            let { email,tipo,cnpj, nome, senha, telefone, foto, geolocalizacao,cpf } = req.body as Usuario;
+            if(req.file){
+              const imagesRequest = req.file as Express.Multer.File
+              const imagesPath = imagesRequest.filename
+              foto = imagesPath
+              console.log("foto: ",{ email,tipo,cnpj, nome, senha, telefone, foto, geolocalizacao,cpf})
+            }       
             const user = await usuarioUseCases.registerUsuario({ email,tipo,cnpj, nome, senha, telefone,senha, foto, geolocalizacao });
             res.status(user.status).json(user.body)
         }
@@ -36,6 +43,16 @@ class UsuarioController{
     const user = await usuarioUseCases.buscarUsuarioPorEmail(email);
     res.status(user.status).json(user.body);
   }
+  async atualizarFoto(req: Request, res: Response){
+      const {email} = req.params
+      if(!req.file){
+        return res.status(400).json("Erro ao informa o arquivo")
+      }
+      const fileName = req.file.filename;
+      const user = await usuarioUseCases.mudarFoto(email,fileName);
+      return res.status(user.status).json(user.body);
+      
+    }
 
   async deleteUsuario(req:Request, res: Response){
     const {email} = req.params

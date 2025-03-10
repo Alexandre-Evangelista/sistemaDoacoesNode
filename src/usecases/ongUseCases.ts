@@ -12,7 +12,7 @@ class OngUseCases {
     async registerOng(ong:CreateONG){
         const ongExist = await ongService.buscarOngPorCnpj(ong.cnpj);
         if(ongExist){
-            throw new Error("ONG já cadastrada.");
+            return {body: "ONG ja existe", status:400};
         }
         ong.senha = await bcrypt.hash(ong.senha, 10);
         const newong = await ongService.criarOng(ong);

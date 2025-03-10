@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import ongUseCases from "../../usecases/ongUseCases.js";
 import bcrypt from "bcryptjs";
 import { CreateONG } from "../../Models/Usuario/registerOng.js";
-
+import { validateZodOng } from "../../utils/ongValidation.js";
 const prisma = new PrismaClient();
 interface CustomRequest extends Request {
   ongCnpj?: string;
@@ -12,6 +12,13 @@ class OngCotroller{
      async registerOng(req:Request,res:Response){
        try{ 
             let { cnpj, nome, senha, telefone, descricao, foto, geolocalizacao } = req.body as CreateONG;
+             const resultValidation = validateZodOng(req.body);
+
+            if (!resultValidation.success) {   
+     
+              const errorMessages = resultValidation.error.format();
+              return res.status(400).json(errorMessages)
+            }
             if(req.file){
               const imagesRequest = req.file as Express.Multer.File
               const imagesPath = imagesRequest.filename

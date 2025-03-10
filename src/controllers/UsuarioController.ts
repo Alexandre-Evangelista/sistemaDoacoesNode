@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import usuarioUseCases from "../usecases/usuarioUseCase.js";
 import bcrypt from "bcryptjs";
 import { Usuario } from "../Models/Usuario/registerUsuario.js";
+import { validateZodUser } from "../utils/userValidation.js";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +13,14 @@ interface CustomRequest extends Request {
 class UsuarioController{
      async registerUsuario(req:Request,res:Response){
        try{ 
+            
             let { email,tipo,cnpj, nome, senha, telefone, foto, geolocalizacao,cpf } = req.body as Usuario;
+            const resultValidation = validateZodUser(req.body);
+            if (!resultValidation.success) {
+              
+              const errorMessages = resultValidation.error.format();
+              return res.status(400).json(errorMessages)
+            }
             if(req.file){
               const imagesRequest = req.file as Express.Multer.File
               const imagesPath = imagesRequest.filename

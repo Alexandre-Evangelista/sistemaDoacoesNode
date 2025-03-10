@@ -12,7 +12,7 @@ class DoacaoController{
         const doacao = await doacoesUseCases.criarDoacao(data);
         return res.status(doacao.status).json(doacao.body)
        }catch(error){
-            return res.status(400).json("error: "+error);
+            return res.status(400).json(error);
        }
     }
 

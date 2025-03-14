@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+// Modelo Usuario
+model Usuario {
+  id             String   @id @default(uuid())
+  email          String    @unique
+  latitude   Float?
+  longitude  Float? 
+  foto           String?   
+  tipo           Boolean?
+  telefone       String?   
+  nome           String    
+  cpf            String?   @unique
+  cnpj           String?   @unique
+  senha           String 
+  avaliacoes     Avaliacao[]
+  doacoes        Doacao[]
+}
+
+
+// Modelo ONG
+model ONG {
+  cnpj            String       @id @default(uuid())
+  nome            String      
+  latitude   Float?
+  longitude  Float ?  
+  foto            String?    
+  descricao       String?     
+  telefone        String
+  senha           String       
+  campanhas       Campanha[]
+  avaliacoes      Avaliacao[]
+  doacoes         Doacao[]
+}
+
+
+// Modelo Campanha
+model Campanha {
+  id             String    @id @default(uuid())
+  descricao      String
+  foto           String
+  latitude   Float?
+  longitude  Float?   // Utilize JSON para armazenar os dados de localização (por exemplo, GeoJSON)
+  datacriacao    DateTime   @default(now())
+  cnpjOng        String?
+  ong            ONG?      @relation(fields: [cnpjOng], references: [cnpj])
+  doacoes        Doacao[]
+
+}
+
+
+// Modelo Doacao
+model Doacao {
+  id              String        @id @default(uuid())
+  datadoacao      DateTime     
+  quantidade      Int
+  tipo            String       
+  email           String?      
+  cnpj            String?     
+  IDcampanha      String?
+  usuario         Usuario?     @relation(fields: [email], references: [email])
+  ong             ONG?         @relation(fields: [cnpj], references: [cnpj])
+  campanha        Campanha?    @relation(fields: [IDcampanha], references: [id])
+}
+
+
+// Modelo Avaliacao
+model Avaliacao {
+  id           String   @id @default(uuid())
+  emailUsuario    String      
+  cnpj            String       
+  feedback        String     
+
+
+  usuario         Usuario      @relation(fields: [emailUsuario], references: [email])
+  ong             ONG          @relation(fields: [cnpj], references: [cnpj])
+  @@unique([emailUsuario, cnpj])
+}

@@ -2,13 +2,14 @@ import { Router } from "express";
 import multer from "multer";
 import uploadMulter from "../config/uploadMulter.js";
 import CampanhaController from "../controllers/campanhaController.js";
+import { parseMultipart } from "../middlewares/multipartMidleware.js";
 
 
 const campanhaRouter = Router();
  const campanhaController = new CampanhaController();
  const upload = multer(uploadMulter.upload("images/ong"));
 
- campanhaRouter.post("/campanha/registar",upload.single("foto"),campanhaController.registerCampanha);
+ campanhaRouter.post("/campanha/registar",upload.single("foto"),parseMultipart,campanhaController.registerCampanha);
  campanhaRouter.get("/campanha",campanhaController.listarCampanhas);
  campanhaRouter.get("/campanha/:id",campanhaController.buscarPorId);
  campanhaRouter.patch("/campanha/:id/foto",upload.single("foto"),campanhaController.atualizarFoto);

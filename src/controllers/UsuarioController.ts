@@ -15,6 +15,7 @@ class UsuarioController{
        try{ 
             
             let { email,tipo,cnpj, nome, senha, telefone, foto, geolocalizacao,cpf } = req.body as Usuario;
+            
             const resultValidation = validateZodUser(req.body);
             if (!resultValidation.success) {
               

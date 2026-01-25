@@ -2,6 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import uploadMulter from "../config/uploadMulter.js";
 import { AutenticarUsuarioToken } from "../middlewares/ONG/authMiddlewareUser.js";
+import { parseMultipart } from "../middlewares/multipartMidleware.js";
 import UsuarioController
  from "../controllers/UsuarioController.js";
 
@@ -9,7 +10,7 @@ import UsuarioController
  const usuarioController = new UsuarioController()
  const upload = multer(uploadMulter.upload("images/ong"))
 
- usuarioRouter.post("/usuario/registrar",upload.single("foto"),usuarioController.registerUsuario)
+ usuarioRouter.post("/usuario/registrar",upload.single("foto"),parseMultipart,usuarioController.registerUsuario)
  usuarioRouter.post("/usuario/login",usuarioController.login)
  usuarioRouter.get("/usuario",AutenticarUsuarioToken, usuarioController.listarUsuarios);
  usuarioRouter.patch("/usuario/:email/foto",AutenticarUsuarioToken,upload.single("foto"),usuarioController.atualizarFoto);

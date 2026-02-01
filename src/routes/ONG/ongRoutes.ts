@@ -12,7 +12,7 @@ import ONGController
 
  ongRouter.post("/ongs/registrar",upload.single("foto"),parseMultipart,ongController.registerOng)
  ongRouter.post("/ongs/login",ongController.login)
- ongRouter.get("/ongs",AutenticarOngToken, ongController.listarONGS);
+ ongRouter.get("/ongs", ongController.listarONGS);
  ongRouter.patch("/ongs/:cnpj/foto",AutenticarOngToken,upload.single("foto"),ongController.atualizarFoto)
  ongRouter.get("/ongs/:cnpj",AutenticarOngToken, ongController.buscarPorCnpj);
  ongRouter.put("/ongs/:cnpj",AutenticarOngToken, ongController.atualizarOng);

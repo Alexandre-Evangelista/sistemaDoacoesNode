@@ -31,7 +31,17 @@ export class OngService {
   
     async listarOngs() {
       
-      return await prisma.oNG.findMany();
+      return await prisma.oNG.findMany({select: {cnpj: true,
+        nome: true,
+        telefone: true,
+          descricao: true,
+          foto: true,
+          latitude: true,
+          longitude: true,
+          campanhas: true,
+          avaliacoes:true,
+          doacoes: true
+      }});
 
     }
 

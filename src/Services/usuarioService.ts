@@ -42,7 +42,22 @@ export class UsuarioService{
         return await prisma.usuario.findUnique({where:{email}});
     }
     async atualizarUsuario(email:string,data:Omit<Usuario,"email">){
-        return await prisma.usuario.update({where:{email},data});
+      data.geolocalizacao?.coordinates[0]
+      const geolocalizacao = data.geolocalizacao? JSON.stringify(data.geolocalizacao)  : null;
+        return await prisma.usuario.update({where:{email},data:{
+          foto: data.foto ?? null,
+          tipo: data.tipo ?? null,
+          senha: data.senha ,
+          telefone: data.telefone ?? null,
+          nome: data.nome ,
+          cpf: data.cpf?? null,
+          cnpj: data.cnpj ?? null,
+          latitude: data.geolocalizacao?.coordinates[1],
+          longitude: data.geolocalizacao?.coordinates[0],
+          avaliacoes: { create: [] },
+          doacoes: { create: [] },
+         }
+        });
     }
     async deletarUsuario(email:string){
         return await prisma.usuario.delete({where:{email}});

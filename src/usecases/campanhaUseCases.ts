@@ -8,10 +8,6 @@ const campanhaServices =new CampanhaService();
 
  class campanhaUseCases {
     async registerCampanha(campanha:Campanha){
-        const campanhaExist = await campanhaServices.buscarCampanhaPorId(campanha.id);
-        if(campanhaExist){
-            throw new Error("Campanha já cadastrada.");
-        }
         const newCampanha= await campanhaServices.criarCampanha(campanha);
         return{body:newCampanha,status:200};
     

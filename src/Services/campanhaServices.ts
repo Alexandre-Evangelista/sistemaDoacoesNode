@@ -2,8 +2,10 @@ import {prisma}  from "../Database/repository.js";
 import { Campanha } from "../Models/registerCampanha.js";
  export class CampanhaService{
     async criarCampanha(data:Campanha){
+        console.log(data)
         data.geolocalizacao?.coordinates[0]
         const geolocalizacao = data.geolocalizacao?JSON.stringify(data.geolocalizacao):null;
+        
         try{
             return await prisma.campanha.create({data:{
                 descricao:data.descricao,

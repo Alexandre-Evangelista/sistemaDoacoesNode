@@ -7,7 +7,6 @@ export class OngService {
       console.log("🔍 Dados da ONG antes da criação:", data);
       data.geolocalizacao?.coordinates[0]
       const geolocalizacao = data.geolocalizacao? JSON.stringify(data.geolocalizacao)  : null;
-      console.log(geolocalizacao)
       try {
       return await prisma.oNG.create({ data: { 
           cnpj: data.cnpj,

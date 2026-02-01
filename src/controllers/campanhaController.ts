@@ -1,59 +1,80 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client"; 
 import campanhaUseCases from "../usecases/campanhaUseCases.js";
 import { Campanha } from "../Models/registerCampanha.js";
 
-const prisma = new PrismaClient();
 
- class CampanhaController{
-    async registerCampanha(req:Request,res:Response){
-        try{
-            let { id, descricao, foto, geolocalizacao } = req.body as Campanha;
-            if(req.file){
-                const imagesRequest = req.file as Express.Multer.File
-                const imagesPath = imagesRequest.filename
-                foto = imagesPath
-                console.log("foto: ",{id, descricao, foto, geolocalizacao })
-              }
-              const campanha =await campanhaUseCases.registerCampanha({ id, descricao, foto, geolocalizacao });
-              return  res.status(campanha.status).json(campanha.body)
-        }
-        catch (error){
-            return res.status(400).json(error)
-        }     
-    }
-    async listarCampanhas(req: Request, res: Response){
-        const campanha= await campanhaUseCases.buscarCampanhas()
-        return res.status(campanha.status).json(campanha.body);
-    }
 
-    async buscarPorId(req: Request, res: Response){
-        const { id } = req.params;
-        const campanha= await campanhaUseCases.buscarCampanhaPorId(id);
-        return res.status(campanha.status).json(campanha.body);
-    }
+class CampanhaController {
 
-    async atualizarFoto(req: Request, res: Response){
-    const {id} = req.params;
-    if(!req.file){
-      return res.status(400).json("Erro ao informa o arquivo")
+  async registerCampanha(req: Request, res: Response) {
+    try {
+      let { descricao, latitude, longitude, cnpjOng } = req.body as Campanha;
+      let foto: string;
+
+      if (req.file) {
+        foto = req.file.filename;
+      } else {
+        return res.status(400).json("Foto é obrigatória");
+      }
+
+      const campanha = await campanhaUseCases.registerCampanha({
+        descricao,
+        foto,
+        latitude: latitude ? Number(latitude) : undefined,
+        longitude: longitude ? Number(longitude) : undefined,
+        cnpjOng,
+      });
+
+      return res.status(campanha.status).json(campanha.body);
+    } catch (error) {
+      console.error(error);
+      return res.status(400).json(error);
     }
-    const fileName = req.file.filename;
-    const campanha = await campanhaUseCases.mudarFoto(id,fileName);
+  }
+
+  async listarCampanhas(req: Request, res: Response) {
+    const campanha = await campanhaUseCases.buscarCampanhas();
     return res.status(campanha.status).json(campanha.body);
-    
+  }
+
+  async buscarPorId(req: Request, res: Response) {
+    const { id } = req.params;
+    const campanha = await campanhaUseCases.buscarCampanhaPorId(id);
+    return res.status(campanha.status).json(campanha.body);
+  }
+
+  async atualizarFoto(req: Request, res: Response) {
+    const { id } = req.params;
+
+    if (!req.file) {
+      return res.status(400).json("Erro ao informar o arquivo");
     }
 
-    async deleteCampanhas(req: Request, res: Response){
-        const {id} = req.params;
-        const campanha= await campanhaUseCases.deletarCampanha(id);
-        return res.status(campanha.status).json(campanha.body);
-    }
+    const fileName = req.file.filename;
+    const campanha = await campanhaUseCases.mudarFoto(id, fileName);
 
-    async atualizarCampanhas(req: Request, res: Response){
-        const {id} = req.params
-        const data= req.body;
-        const campanha= await campanhaUseCases.updateCampanha(id,data)
-        return res.status(campanha.status).json(campanha.body);
-    }
-}export default CampanhaController;
+    return res.status(campanha.status).json(campanha.body);
+  }
+
+  async atualizarCampanhas(req: Request, res: Response) {
+    const { id } = req.params;
+    const { descricao, latitude, longitude, cnpjOng } = req.body;
+
+    const campanha = await campanhaUseCases.updateCampanha(id, {
+      descricao,
+      latitude: latitude ? Number(latitude) : undefined,
+      longitude: longitude ? Number(longitude) : undefined,
+      cnpjOng,
+    });
+
+    return res.status(campanha.status).json(campanha.body);
+  }
+
+  async deleteCampanhas(req: Request, res: Response) {
+    const { id } = req.params;
+    const campanha = await campanhaUseCases.deletarCampanha(id);
+    return res.status(campanha.status).json(campanha.body);
+  }
+}
+
+export default new CampanhaController();

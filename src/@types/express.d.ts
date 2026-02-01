@@ -33,6 +33,7 @@ type Usuario = {
   // Tipo para o modelo Campanha
   type Campanha = {
     id: string;
+    nome: string;
     descricao: string;
     foto: string;
     latitude:   Float;

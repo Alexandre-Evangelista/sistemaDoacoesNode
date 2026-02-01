@@ -95,7 +95,8 @@ class UsuarioController{
       return res.status(403).json("Acesso Negado!")
     }
     const data = req.body;
-    data.senha = await bcrypt.hash(data.senha, 10);
+    if(data.senha)
+      data.senha = await bcrypt.hash(data.senha, 10);
     const result = await usuarioUseCases.updateUsuario(email,data);
     return res.status(result.status).json(result.status);
   }

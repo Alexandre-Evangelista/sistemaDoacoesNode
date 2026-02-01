@@ -8,6 +8,7 @@ export class CampanhaService {
     try {
       return await prisma.campanha.create({
         data: {
+          nome: data.nome?? null,
           descricao: data.descricao,
           foto: data.foto,
           latitude: data.latitude ?? null,

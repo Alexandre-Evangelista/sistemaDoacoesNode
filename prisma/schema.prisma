@@ -39,6 +39,7 @@ model ONG {
 
 model Campanha {
   descricao   String
+  nome       String @default("Campanha de doação")
   foto        String
   latitude    Float?
   longitude   Float?

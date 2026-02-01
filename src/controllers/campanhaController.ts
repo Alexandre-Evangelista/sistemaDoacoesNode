@@ -8,7 +8,7 @@ class CampanhaController {
 
   async registerCampanha(req: Request, res: Response) {
     try {
-      let { descricao, latitude, longitude, cnpjOng } = req.body as Campanha;
+      let { descricao,nome, latitude, longitude, cnpjOng } = req.body as Campanha;
       let foto: string;
 
       if (req.file) {
@@ -20,6 +20,7 @@ class CampanhaController {
       const campanha = await campanhaUseCases.registerCampanha({
         descricao,
         foto,
+        nome,
         latitude: latitude ? Number(latitude) : undefined,
         longitude: longitude ? Number(longitude) : undefined,
         cnpjOng,

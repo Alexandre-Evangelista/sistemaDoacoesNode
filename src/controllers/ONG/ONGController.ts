@@ -85,7 +85,8 @@ class OngCotroller{
   async atualizarOng(req:Request, res: Response){
     const { cnpj } = req.params;
     const data = req.body;
-    data.senha = await bcrypt.hash(data.senha, 10);
+    if(data.senha)
+      data.senha = await bcrypt.hash(data.senha, 10);
     const result = await ongUseCases.updateOng(cnpj,data);
     return res.status(result.status).json(result.status);
   }
